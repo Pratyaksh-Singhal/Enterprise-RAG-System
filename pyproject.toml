@@ -1,0 +1,33 @@
+[project]
+name = "enterprise-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "sentence-transformers>=3.0.1",
+    "logfire[system-metrics,fastapi,requests]>=4.37.0",
+    "loguru",
+    "python-dotenv",
+    "fastapi",
+    "uvicorn[standard]",
+    "requests",
+    "numpy",
+    "pypdf",
+    "qdrant-client",
+    "pdfplumber",
+    "torch",
+    "torchvision",
+    "torchaudio",
+]
+
+# PyTorch CUDA 12.1 index — supports RTX 30-series (Ampere sm_86) and RTX 40-series (Ada sm_89)
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu121" }]
+torchvision = [{ index = "pytorch-cu121" }]
+torchaudio = [{ index = "pytorch-cu121" }]
