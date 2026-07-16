@@ -1,0 +1,12 @@
+logfire[fastapi,requests]
+loguru
+ipykernel
+python-dotenv
+fastapi
+uvicorn[standard]
+requests
+numpy
+sentence-transformers
+pypdf
+qdrant-client
+pdfplumber
