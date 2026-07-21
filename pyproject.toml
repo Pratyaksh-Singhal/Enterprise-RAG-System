@@ -19,6 +19,14 @@ dependencies = [
     "torch",
     "torchvision",
     "torchaudio",
+    "flashrank>=0.2.10",
+    "streamlit>=1.59.2",
+    "langchain-groq>=1.1.3",
+    "websockets>=16.1",
+    "langgraph>=1.2.2",
+    "nemoguardrails>=0.23.0",
+    "portkey-ai>=2.3.2",
+    "langchain-openai>=1.3.5",
 ]
 
 # PyTorch CUDA 12.1 index — supports RTX 30-series (Ampere sm_86) and RTX 40-series (Ada sm_89)
