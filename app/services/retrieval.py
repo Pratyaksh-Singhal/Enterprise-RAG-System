@@ -9,8 +9,9 @@ BATCH_SIZE = 32
 _active_model = None
 _model_type: str | None = None  # "primary" or "fallback"
 
-# Determine the best available device (GPU if available, else CPU)
-_device = "cuda" if torch.cuda.is_available() else "cpu"
+# Force CPU — the installed PyTorch wheels don't ship kernels for sm_120 (RTX 5050 Blackwell).
+# CPU is fast enough for single-query embedding at inference time.
+_device = "cpu"
 
 # ── Model initialisation ───────────────────────────────────────────────────────
 
