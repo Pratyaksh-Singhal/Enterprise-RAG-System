@@ -74,8 +74,8 @@ The system employs a rigorous 3-stage security gate before any query reaches the
 
 ```mermaid
 flowchart TD
-    A[User Query] --> B{Stage 1: Regex PII Filter}
-    B -- Matches SSN/CC/Email --> C[Block & Refuse]
+    A[User Query] --> B{Stage 1: Presidio PII NLP Filter}
+    B -- Matches SSN/CC/Aadhaar/PAN/Email --> C[Block & Refuse]
     B -- Clean --> D{Stage 2: Security Classifier\nllama-3.1-8b-instant}
     D -- Detects Jailbreak/Hacking --> C
     D -- Safe --> E{Stage 3: NeMo Guardrails}
