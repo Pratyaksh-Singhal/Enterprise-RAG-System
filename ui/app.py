@@ -28,7 +28,7 @@ except Exception as e:
 
 # --- PAGE CONFIG ---
 st.set_page_config(
-    page_title="Enterprise Agentic RAG",
+    page_title="Advanced Enterprise RAG",
     page_icon="🤖",
     layout="wide",
 )

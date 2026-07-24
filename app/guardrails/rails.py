@@ -11,8 +11,6 @@ _rails: LLMRails | None = None
 _llama_guard: ChatGroq | None = None
 _analyzer: AnalyzerEngine | None = None
 
-# Entities to block (Excluding PERSON, LOCATION, ORGANIZATION for business reasons)
-# Added Indian specific IDs as requested
 PII_ENTITIES = [
     "EMAIL_ADDRESS", "PHONE_NUMBER", "CREDIT_CARD", "CRYPTO",
     "IBAN_CODE", "IP_ADDRESS", "US_SSN", "US_PASSPORT",

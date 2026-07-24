@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "sentence-transformers>=3.0.1",
+    "sentence-transformers==2.7.0",
     "logfire[system-metrics,fastapi,requests]>=4.37.0",
     "loguru",
     "python-dotenv",

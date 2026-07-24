@@ -1,0 +1,27 @@
+[
+  {
+    "question": "What was the total amount of commercial real estate first-mortgage commitments closed by ACRES in 2022?",
+    "ground_truth": "$610 million",
+    "context": "During 2022, we selectively grew the Company’s loan portfolio by leveraging ACRES’s complementary lending pipeline and network of sponsor relationships. We are pleased to note that we closed over $610 million of commercial real estate first-mortgage commitments in 2022."
+  },
+  {
+    "question": "What percentage of the loan portfolio was performing in line or near underwritten expectations as of December 31, 2022?",
+    "ground_truth": "95%",
+    "context": "As of December 31, 2022, 95% of the loan portfolio was performing in line or near underwritten expectations and a significant majority of loans were current on contractual payments, which is an improvement from 92% at December 31, 2021."
+  },
+  {
+    "question": "How many shares of common stock were repurchased by the Company during the year ended December 31, 2022?",
+    "ground_truth": "849,000",
+    "context": "During the year ended December 31, 2022, we repurchased 849,000 shares of common stock at an average price of $10.35, which contributed $1.32 per share to common stock book value since we were able to repurchase the shares at prices significantly below our common stock book value."
+  },
+  {
+    "question": "What was the common stock book value at December 31, 2022?",
+    "ground_truth": "$24.54",
+    "context": "Common stock book value was $24.54 at December 31, 2022, up 3% from December 31, 2021."
+  },
+  {
+    "question": "What was the par value of the hotel portfolio loan that was paid off in full in January 2023?",
+    "ground_truth": "$56.5 million",
+    "context": "In January 2023, one watch list loan, a hotel portfolio in the southwest region with a par value of $56.5 million was paid off in full, which reduced the value of our watch list loans in half as compared to year end 2022."
+  }
+]

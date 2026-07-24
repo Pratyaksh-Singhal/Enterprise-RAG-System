@@ -50,6 +50,8 @@ def _init():
 def get_embedding_dim() -> int:
     """Return the vector dimension for the active model. Call after _init()."""
     _init()
+    if hasattr(_active_model, "get_sentence_embedding_dimension"):
+        return _active_model.get_sentence_embedding_dimension()
     return _active_model.get_embedding_dimension()
 
 
@@ -64,6 +66,10 @@ def _embed_batch(batch: list[str]) -> list[list[float]]:
 
 def embed_query(query: str) -> list[float]:
     _init()
+    if _model_type == "primary":
+        # mxbai-embed-large-v1 requires prefix for query encoding
+        formatted = f"Represent this sentence for searching relevant passages: {query}"
+        return _active_model.encode([formatted])[0].tolist()
     return _active_model.encode([query])[0].tolist()
 
 
