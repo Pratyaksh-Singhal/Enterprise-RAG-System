@@ -49,7 +49,13 @@ uv pip install -r pyproject.toml
 # uv sync
 ```
 
-### 3. Running the Application
+### 3. Data Ingestion
+Before querying the system, ingest your enterprise documents into the Qdrant vector database:
+```powershell
+.\.venv\Scripts\python.exe -m app.ingestion.preprocessor
+```
+
+### 4. Running the Application
 The application requires both the FastAPI backend and the Streamlit frontend to be running simultaneously.
 
 **Terminal 1 (Backend):**
@@ -60,6 +66,21 @@ The application requires both the FastAPI backend and the Streamlit frontend to 
 **Terminal 2 (Frontend):**
 ```powershell
 .\.venv\Scripts\streamlit.exe run ui/app.py
+```
+
+## 🛡️ Hybrid Guardrails Architecture
+
+The system employs a rigorous 3-stage security gate before any query reaches the heavy LangGraph pipeline:
+
+```mermaid
+flowchart TD
+    A[User Query] --> B{Stage 1: Regex PII Filter}
+    B -- Matches SSN/CC/Email --> C[Block & Refuse]
+    B -- Clean --> D{Stage 2: Security Classifier\nllama-3.1-8b-instant}
+    D -- Detects Jailbreak/Hacking --> C
+    D -- Safe --> E{Stage 3: NeMo Guardrails}
+    E -- Off-topic / Greeting --> F[Handle Conversationally]
+    E -- Business Query --> G[Proceed to LangGraph RAG Pipeline]
 ```
 
 ## 🏗️ Project Structure
