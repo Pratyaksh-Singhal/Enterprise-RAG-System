@@ -20,18 +20,18 @@ Evaluated against a golden dataset of 5 financial Q&A pairs generated from real 
 
 ---
 
-## 🚀 Key Features & Architecture
+## 🚀 Key Features
 
-- **Agentic Workflow (LangGraph)**: State-machine driven agent with Planner, Retriever, and Responder nodes for multi-step reasoning over retrieved knowledge.
-- **LLM Gateway (Portkey AI)**: Centralised proxy providing intelligent routing, semantic caching, and automated fallback (`llama-3.3-70b` → `llama-3.1-8b`).
-- **NLP-Powered PII Guard (Microsoft Presidio)**: Stage 1 of the security pipeline uses Presidio's spaCy NLP engine to detect and block unstructured PII (SSNs, Aadhaar, PAN cards, credit cards, emails, IPs) — far beyond what regex alone can catch.
-- **Security Classifier (LLM-based)**: Stage 2 uses `llama-3.1-8b-instant` to detect jailbreaks and harmful prompt injections before reaching the main pipeline.
-- **Intent Guardrails (NVIDIA NeMo)**: Stage 3 uses Colang rules to manage conversational intent — handling greetings, off-topic queries, and routing genuine business questions.
-- **Vector Database (Qdrant Cloud)**: High-performance semantic search over ingested enterprise knowledge.
-- **Structure-Aware Chunking**: A recursive text splitter that respects paragraph, sentence, and clause boundaries — preserving financial figures and complete sentences across chunk boundaries.
-- **Semantic Reranking (FlashRank)**: Local cross-encoder ONNX model (`ms-marco-MiniLM-L-6-v2`) re-scores candidate chunks for high retrieval precision without network latency.
-- **Observability (Pydantic Logfire)**: Deep distributed tracing across both the FastAPI backend and Streamlit frontend.
-- **Automated Evaluation Suite**: End-to-end evaluation pipeline (`scripts/evaluate_rag.py`) implementing 5 RAG-specific metrics using LLM-as-judge, completely independent of `pyarrow`/HuggingFace `datasets`.
+| Feature | Detail |
+|---|---|
+| **Agentic Workflow** | LangGraph state-machine with Planner → Retriever → Responder nodes |
+| **PII Detection** | Microsoft Presidio (spaCy NLP) blocks SSNs, Aadhaar, PAN, CC, emails |
+| **Jailbreak Filter** | `llama-3.1-8b-instant` classifies and blocks harmful prompt injections |
+| **Intent Guardrails** | NeMo Colang rules handle off-topic queries and greetings |
+| **Retrieval** | Qdrant vector search with `mxbai-embed-large-v1` embeddings |
+| **Reranking** | FlashRank cross-encoder re-scores top-15 candidates → keeps top-5 |
+| **LLM Gateway** | Portkey AI handles semantic caching and model fallback |
+| **Evaluation** | LLM-as-judge pipeline scoring Faithfulness, Precision, Recall & more |
 
 ---
 
@@ -120,25 +120,38 @@ BACKEND_URL=http://localhost:8000
 ### 3. Download the spaCy NLP Model
 Required for Presidio PII detection:
 ```bash
-uv run python -m spacy download en_core_web_lg
+python -m spacy download en_core_web_lg
 ```
 
 ### 4. Data Ingestion
-Ingest your enterprise documents into Qdrant. Use `--wipe` to rebuild a fresh index:
-```powershell
-$env:CUDA_VISIBLE_DEVICES=""; .\.venv\Scripts\python.exe -m app.ingestion.preprocessor data --wipe
+Ingest your enterprise documents into Qdrant. Use `--wipe` to rebuild a fresh index.
+
+**CPU (default — RTX 50-series or unsupported GPU):**
+```bash
+set CUDA_VISIBLE_DEVICES= && python -m app.ingestion.preprocessor data --wipe
+```
+
+**GPU (CUDA-compatible — RTX 10–40 series):**
+```bash
+python -m app.ingestion.preprocessor data --wipe
 ```
 
 ### 5. Running the Application
 
 **Terminal 1 — Backend:**
-```powershell
-$env:CUDA_VISIBLE_DEVICES=""; .\.venv\Scripts\uvicorn.exe app.main:app --port 8000
+
+*CPU:*
+```bash
+set CUDA_VISIBLE_DEVICES= && uvicorn app.main:app --port 8000
+```
+*GPU:*
+```bash
+uvicorn app.main:app --port 8000
 ```
 
 **Terminal 2 — Frontend:**
-```powershell
-.\.venv\Scripts\streamlit.exe run ui/app.py
+```bash
+streamlit run ui/app.py
 ```
 
 ---
@@ -147,15 +160,15 @@ $env:CUDA_VISIBLE_DEVICES=""; .\.venv\Scripts\uvicorn.exe app.main:app --port 80
 
 ### Step 1: Generate Golden Dataset
 Synthesises Q&A pairs from your ingested PDFs using Groq LLM:
-```powershell
-.\.venv\Scripts\python.exe scripts/generate_goldens.py
+```bash
+python scripts/generate_goldens.py
 ```
 Output: `evaluation/goldens.json`
 
 ### Step 2: Run Evaluation
-Runs your live RAG system against the golden dataset and scores it across 5 metrics:
-```powershell
-.\.venv\Scripts\python.exe scripts/evaluate_rag.py
+> Make sure the backend server is running first (Terminal 1 above).
+```bash
+python scripts/evaluate_rag.py
 ```
 Output: printed summary table + `evaluation/results.json`
 
